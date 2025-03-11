@@ -13,14 +13,12 @@ SOURCES= \
 radioberry.c \
 gateware.c \
 stream.c \
-register.c \
 pa.c
 
 HEADERS= \
 radioberry.h \
 gateware.h \
 stream.h \
-register.h \
 sensors.h \
 pa.h
 
@@ -28,7 +26,6 @@ OBJS= \
 radioberry.o \
 gateware.o \
 stream.o \
-register.o \
 pa.o
 
 all: prebuild $(PROGRAM) $(HEADERS) $(SOURCES) 

@@ -55,7 +55,6 @@ For more information, please refer to <http://unlicense.org/>
 #include "radioberry_ioctl.h"
 #include "radioberry.h"
 #include "filters.h"
-#include "register.h"
 #include "bias.h"
 #include "measure.h"
 #include <pthread.h>
@@ -76,7 +75,6 @@ int main(int argc, char **argv)
 
 static void start_rb_control_thread(void);
 static void start_rb_measure_thread(void);
-static void start_rb_register_thread(void);
 static void start_timer_thread(void);
 
 static int initRadioberry(void) {
@@ -191,7 +189,6 @@ static int initRadioberry(void) {
 	int flags = fcntl(sock_TCP_Server, F_GETFL, 0);
     fcntl(sock_TCP_Server, F_SETFL, flags | O_NONBLOCK);
 	
-	start_rb_register_thread();
 	return 0;
 }
 
@@ -523,21 +520,6 @@ static void *rb_measure_thread(void *arg) {
 static void start_rb_measure_thread(void) {
 	pthread_t pid1; 
 	pthread_create(&pid1, NULL, rb_measure_thread, NULL);
-}
-
-static void *rb_register_thread(void *arg) {
-	sleep(60); 
-	sprintf(gatewareversion,"%d.%d", gateware_major_version, gateware_minor_version);
-	sprintf(firmwareversion,"%s", FIRMWAREVERSION);
-	sprintf(driverversion,"%.2f", driver_version/100.0); 
-	gateware_fpga_type == 0 ? sprintf(fpgatype,"%s", "-") : gateware_fpga_type == 1 ? sprintf(fpgatype,"%s", "CL016") : sprintf(fpgatype,"%s", "CL025");
-	registerRadioberry();
-	return NULL;
-}
-
-static void start_rb_register_thread(void) {
-	pthread_t pid1; 
-	pthread_create(&pid1, NULL, rb_register_thread, NULL);
 }
 
 static void *timer_thread(void *arg) {

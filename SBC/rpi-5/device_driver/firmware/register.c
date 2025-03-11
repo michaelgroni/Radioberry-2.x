@@ -1,4 +1,3 @@
-#include "register.h"
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -148,10 +147,5 @@ int postRadioberryConfiguration() {
 	return result;
 }
 
-void registerRadioberry() {
-	if (!getMacAddress()) return;
-	loadRadioberryProps();
-	if (postRadioberryConfiguration()) fprintf(stderr, "Registering your Radioberry not registered."); else fprintf(stderr, "Your Radioberry is registered: http://www.pa3gsb.nl/radioberry/api/read.php\n");
-}
 
 //end of source

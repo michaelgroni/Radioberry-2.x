@@ -14,7 +14,6 @@ PROGRAM=$(BLDDIR)radioberry
 SOURCES= \
 measure.c \
 bias.c \
-register.c \
 radioberry.c 
 
 HEADERS= \
@@ -22,10 +21,8 @@ measure.h \
 bias.h \
 radioberry.h \
 radioberry_ioctl.h \
-register.h 
 
 OBJS= \
-register.o \
 bias.o \
 measure.o \
 radioberry.o 

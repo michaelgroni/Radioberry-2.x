@@ -51,7 +51,6 @@ For more information, please refer to <http://unlicense.org/>
 #include "radioberry.h"
 #include "gateware.h"
 #include "stream.h"
-#include "register.h"
 #include "pa.h"
 
 #ifndef _WIN32	
@@ -101,20 +100,6 @@ int load_radioberry_gateware() {
 	return ret;
 }
 
-static void *rb_register_thread(void *arg) {
-	sprintf(gatewareversion,"%d.%d", gateware_major_version, gateware_minor_version);
-	sprintf(firmwareversion,"%s", FIRMWAREVERSION);
-	//major-minor-build of ftdi driver
-	sprintf(driverversion,"%02x.%02x.%02x", ((driver_version >>16) & 0xFF), ((driver_version >>8) & 0xFF), (driver_version & 0xFF));
-	gateware_fpga_type == 0 ? sprintf(fpgatype,"%s", "-") : gateware_fpga_type == 1 ? sprintf(fpgatype,"%s", "CL016") : sprintf(fpgatype,"%s", "CL025");
-	registerRadioberry();
-	return NULL;
-}
-
-void start_rb_register_thread() {
-	pthread_t pid1; 
-	pthread_create(&pid1, NULL, rb_register_thread, NULL);
-}
 
 static void *rb_pa_thread(void *arg) {
 	fprintf(stderr,"Try to connect to external Amplifier\n");
@@ -547,7 +532,6 @@ int main(int argc, char **argv)
     fcntl(sock_TCP_Server, F_SETFL, flags | O_NONBLOCK);
 #endif
 
-	start_rb_register_thread();
 	
 	start_temperature_thread();
 	
