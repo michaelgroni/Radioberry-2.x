@@ -11,6 +11,9 @@ DESTDIR = /usr/local/bin
 KERNEL_HEADERS=$(DESTDIR)/lib/modules/$(KR)/build
 MAKEFLAGS += --no-print-directory
 
+LDFLAGS += -L$(PWD)/wdsp
+export LD_LIBRARY_PATH := $(PWD)/wdsp:$(LD_LIBRARY_PATH)
+
 export INSTALL DESTDIR KERNEL_HEADERS
 
 .PHONY: all check-if-root clean clean-driver clean-firmware clean-pihpsdr \
@@ -47,7 +50,7 @@ $(FIRMWARE): $(dir $(FIRMWARE))
 
 # TODO build phpsdr with not-yet installed wdsp
 $(PIHPSDR): $(WDSP) $(dir $(PIHPSDR))
-	+$(MAKE) -C pihpsdr GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI CFLAGS="-I$(PWD)/wdsp" LDFLAGS="-L$(PWD)/wdsp"
+	+$(MAKE) -C pihpsdr GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI CFLAGS="-I$(PWD)/wdsp"
 
 $(WDSP): $(dir $(WDSP))
 	+$(MAKE) -C wdsp
@@ -81,7 +84,7 @@ install-driver: check-if-root $(DRIVER)
 	$(if $(DESTDIR),,chmod 666 /dev/radioberry)
 
 install-software: check-if-root
-	$(MAKE) -C pihpsdr install GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI CFLAGS="-I$(PWD)/wdsp" LDFLAGS="-L$(PWD)/wdsp"
+	$(MAKE) -C pihpsdr install GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI CFLAGS="-I$(PWD)/wdsp"
 	$(MAKE) -C wdsp install
 
 check-if-root:
