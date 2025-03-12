@@ -47,7 +47,7 @@ $(FIRMWARE): $(dir $(FIRMWARE))
 
 # TODO build phpsdr with not-yet installed wdsp
 $(PIHPSDR): $(WDSP) $(dir $(PIHPSDR))
-	+$(MAKE) -C pihpsdr GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI
+	+$(MAKE) -C pihpsdr GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI CFLAGS="-I$(PWD)/wdsp"
 
 $(WDSP): $(dir $(WDSP))
 	+$(MAKE) -C wdsp
@@ -81,7 +81,7 @@ install-driver: check-if-root $(DRIVER)
 	$(if $(DESTDIR),,chmod 666 /dev/radioberry)
 
 install-software: check-if-root
-	$(MAKE) -C pihpsdr install GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI
+	$(MAKE) -C pihpsdr install GPIO_INCLUDE= PURESIGNAL_INCLUDE= MIDI_INCLUDE=MIDI CFLAGS="-I$(PWD)/wdsp"
 	$(MAKE) -C wdsp install
 
 check-if-root:
